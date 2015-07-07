@@ -1,0 +1,156 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <title>BezierView</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        
+        <!-- Customs stylesheet -->
+        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="css/icons.css" />
+        
+        <!-- jQuery and jQuery UI libraries -->
+        <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+        
+        <!-- Three.js -->
+        <script type="text/javascript" src="js/three.js"></script>
+        <script type="text/javascript" src="js/OrbitControls.js"></script>
+        
+        <script type="text/javascript" src="js/crv.js"></script>
+        
+        <script type="text/javascript" src="js/HighLight.js"></script>
+        
+        <script type="text/javascript" src="js/bvPatch.js"></script>
+        
+        <script type="text/javascript" src="js/EVal.js"></script>
+        
+        <script type="text/javascript" src="js/Reader.js"></script>
+        
+        <!-- The main renderer and starting point -->
+        <script type="text/javascript" src="js/Render.js"></script>
+        
+        <!-- Custom scripts-->
+        <script type="text/javascript" src="js/BezierView.js"></script>
+        <script>
+                $(document).ready(function(){
+                        //Creating BezierView and initialization components on screen
+                        bv = new BezierView();
+                        if(bv.checkWebGL()){
+                            //Creating a Render object
+                            render = new Render();
+                            
+                            //Initial function that create a canvas element and set the THREE.js scene
+                            var canvasViewer = render.init();
+                            
+                            //Active the scripts options
+                            bv.init(render);
+                            
+                            //Initialization of the render object and setting a canvas
+                            $('#glviewer').replaceWith(canvasViewer);
+                            
+                            //Add first mesh
+                            render.setMeshFromFile("data/cube.bv");
+                            
+                            //Function that render the scene
+                            render.render();
+                        }
+                });
+        </script>
+    </head>
+    <body>
+        <nav><!-- MENU -->
+            <div class="apptitle">BezierView WebGL</div>
+            <ul>
+                <li>
+                    <a href="#">File</a>
+                    <ul>
+                        <li>
+                            <a href="#">Default Meshes<span class="icon-arrow-menu"></span></a>
+                            <ul>
+                                <li class="deafult-mesh" filepath="data/cube.bv">
+                                    <a href="#">Cube (Polyhedron)</a>
+                                </li>
+                                <li class="deafult-mesh" filepath="data/dtorus.bv">
+                                    <a href="#">Double torus</a>
+                                </li>
+                                <li class="deafult-mesh" filepath="data/hand.bv">
+                                    <a href="#">Hand (Rational)</a>
+                                </li>
+                                <li class="deafult-mesh" filepath="data/tri1.bv">
+                                    <a href="#">Triangular Bezier</a>
+                                </li>
+                                <li class="deafult-mesh" filepath="data/hex2.bv">
+                                    <a href="#">Hex2 (Tensor-product)</a>
+                                </li>
+                            </ul>
+                        </li>
+                    
+                        <li id="bvTextInputMenu">
+                            <a href="#">BV Text Input</a>
+                        </li>   
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Display</a>
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <input type="checkbox" id="polygonFace" checked="checked" />
+                                <label for="polygonFace"><span></span>Polygon Face</label>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <input type="checkbox" id="polygonMesh" />
+                                <label for="polygonMesh"><span></span>Polygon Mesh</label>
+                            </a>
+                        </li>
+                        <li>
+                        <a href="#">
+                            <hr />
+                        </a>
+                        </li>
+                        <li>
+                            <a href="#">Reflection Lines</a>
+                        </li>
+                        <li>
+                            <a href="#">Highlight Lines</a>
+                        </li>
+                    </ul>
+                </li>
+                <!--li>
+                    <a href="#">View</a>
+                    <ul>
+                        <li>
+                            <a href="#">Regular</a>
+                        </li>
+                        <li>
+                            <a href="#">Curvature</a>
+                        </li>
+                        <li>
+                            <a href="#">Highlight Lines</a>
+                        </li>
+                        <li>
+                            <a href="#">Reflection Lines</a>
+                        </li>
+                    </ul>
+                </li-->
+            </ul>
+        </nav><!-- end MENU BAR -->
+            
+        <div id="viewer" >
+            <div id="glviewer"></div>
+        </div>
+            
+        <div id="bvTextInput">
+            <h3>Enter with a BezierViewer model</h3>
+            <textarea id="bvInput" rows="20" cols="100"></textarea>
+            <br/>
+            <div class="right" style="  margin-right: 40px; margin-top: 10px;">
+                <button type="button" id="loadBVTextInput">Load</button>
+                <button type="button" id="closeBVTextInput">Close</button>
+            </div>
+        </div>
+    </body>    
+</html>
