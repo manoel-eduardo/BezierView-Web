@@ -63,7 +63,7 @@ Render.prototype.init = function() {
 
     //Initializate variables
     this.show_patch         = true;
-    this.show_controlMesh   = false;
+    this.show_controlMesh   = true;
     
     //this.show_curvature     = false;
     
@@ -97,7 +97,7 @@ Render.prototype.setMeshFromFile = function(file) {
 };
 
 Render.prototype.setMeshFromText = function(data) {
-  // first remove all the current ones
+    // first remove all the current ones
     this.removeAllMeshes();
 
     // load new mesh
@@ -133,16 +133,32 @@ Render.prototype.loadMesh = function(data) {
 	
     //Getting geometries from the file
     var patches = this.reader.getPatches(data);
-    
+
     //Creating a defatul material to fill the mesh
-    //var material = new THREE.MeshNormalMaterial();
+    var material = new THREE.MeshNormalMaterial();
+    //var material = new THREE.MeshBasicMaterial( { color: 0xff000, wireframe: false } );
     var wireframeMaterial = new THREE.MeshLambertMaterial({ wireframeLinewidth: 5, color: 0x000000, wireframe: true });
-    var material = new THREE.MeshBasicMaterial( { color: 0x55B663 } );
+    
+    
+    //Evaluator object
+    evaluator = new EVal();
     
     //Adding all meshes loaded from the file to the Object3D
     for(var i = 0; i < patches.length; i++){
-        this.patch_object.add(new THREE.Mesh(patches[i], material));
-        this.control_object.add(new THREE.Mesh(patches[i], wireframeMaterial));
+        //Creating patch object
+        var patch_mesh = new bvPatch(patches[i], {subdivisionLevel: this.subdivision_level});
+        
+        //Create control geometry
+        var control_geometry;
+		if (patches[i].type == 1) // polyhedron
+			control_geometry = patches[i].geometry;
+		else if (patches[i].type == 3) // triangular bezier
+			control_geometry = evaluator.eval_control_mesh(patches[i].type, patches[i].deg, patches[i].pts);
+		else
+			control_geometry = evaluator.eval_control_mesh(patches[i].type, [patches[i].degu,patches[i].degv], patches[i].pts);
+        
+        this.patch_object.add(new THREE.Mesh( patch_mesh.geometry,  material));
+        this.control_object.add(new THREE.Mesh( control_geometry,  wireframeMaterial));
     }
 
     // proper viewing of patches and control mesh

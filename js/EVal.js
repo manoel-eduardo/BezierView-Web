@@ -155,11 +155,11 @@ EVal.prototype.eval_triangular = function(patch, subDepth) {
             // use two different mapping functions
             //  for the interior and the boundary
             if (atvtx)
-                b2i = b2i_k;
+                b2i = this.b2i_k;
             else if (onbdy)    
-                b2i = b2i_j;
+                b2i = this.b2i_j;
             else
-                b2i = b2i_i;
+                b2i = this.b2i_i;
 
             /* initialize the DeCastel Array */
             for(var i=0;i<=deg;i++)
@@ -253,8 +253,10 @@ EVal.prototype.eval_triangular = function(patch, subDepth) {
 			// compute the curvatures (Gaussian, mean, min and max)
 			// at the (u,v) parameter
 			// TODO: Curvature
-            h = this.crv3 (V00, V01, V02, V10, V20, V11, deg, crv_array[loc]);
-
+            //h = this.crv3 (V00, V01, V02, V10, V20, V11, deg, crv_array[loc]);
+            crvObj = new CRV();
+            crvObj.init();
+            h = crvObj.crv3 (V00, V01, V02, V10, V20, V11, deg, crv_array[loc]);
             //printf("value %f at %d \n", h, loc);
             loc ++;
         }
@@ -269,7 +271,7 @@ EVal.prototype.eval_triangular = function(patch, subDepth) {
 	
 	// all the vertices first
 	for (var i = 0; i < size; i++) {
-		geo.vertices.push(new THREE.Vertex(eval_P[i]));
+		geo.vertices.push(new THREE.Vector4(eval_P[i].x,eval_P[i].y,eval_P[i].z,eval_P[i].w));
 		//console.log(geo.vertices[i]);
 	}
 	
@@ -415,7 +417,7 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 	bigstepv = degv;	/* distance between patches -> row direction */
 
     crv = new CRV();
-    
+    crv.init();
 	// st==1
 	for (var r=0; r<sizev; r += bigstepv)  // row
 	{
@@ -426,7 +428,7 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 			loc = (c/bigstepu*C + r/bigstepv) ;
 
 			// curvature
-			h = crv4(bb[rs+c],bb[rs+c+st],bb[rs+c+2*st], // curvature
+			h = crv.crv4(bb[rs+c],bb[rs+c+st],bb[rs+c+2*st], // curvature
 					bb[r1+c],bb[r2+c],bb[r1+c+st],degu, degv, crv_array[loc]);
 
 			this.evalPN(bb[rs+c], bb[r1+c], bb[rs+c+st], eval_P[loc],
@@ -496,8 +498,8 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 	var geo = new THREE.Geometry();
 
 	for(var i=0;i < size; i++)
-		geo.vertices.push(new THREE.Vertex(eval_P[i]));
-
+		geo.vertices.push(new THREE.Vector4(eval_P[i].x, eval_P[i].y, eval_P[i].z, eval_P[i].w));
+    
 	var normal_flipped = false;
 	for(var i=0;i< pts; i++) {
 		for(var j=0;j < pts;j++)       // this loop will draw the quad strip:
@@ -510,16 +512,18 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 			if (v1 >= size || v2 >= size || v3>=size || v4 >= size){
 				alert('error');
 			}
-			var face;
+
 			if(!normal_flipped) { // reverse the orientation of the patch
-				face = new THREE.Face4(v1,v2,v3,v4, [eval_N[v1],eval_N[v2],eval_N[v3],eval_N[v4]]);
-				// face.vertexColors = color_array(v1,v2,v3,v4,crv_array)
+				//face = new THREE.Face4(v1,v2,v3,v4, [eval_N[v1],eval_N[v2],eval_N[v3],eval_N[v4]]);
+				geo.faces.push(new THREE.Face3(v1, v2, v3, [eval_N[v1], eval_N[v2], eval_N[v3]]));
+				geo.faces.push(new THREE.Face3(v1, v3, v4, [eval_N[v1], eval_N[v3], eval_N[v4]]));
 			}
 			else {
-				face = new THREE.Face4(v4,v3,v2,v1, [eval_N[v4],eval_N[v3],eval_N[v2],eval_N[v1]]);
-				// face.vertexColors = color_array(v4,v3,v2,v1,crv_array)
+				//face = new THREE.Face4(v4,v3,v2,v1, [eval_N[v4],eval_N[v3],eval_N[v2],eval_N[v1]]);
+				geo.faces.push(new THREE.Face3(v4, v3, v2, [eval_N[v4], eval_N[v3], eval_N[v2]]));
+				geo.faces.push(new THREE.Face3(v4, v2, v1, [eval_N[v4], eval_N[v2], eval_N[v1]]));
 			}
-			geo.faces.push(face);
+			
 		}
 	}
 
@@ -664,7 +668,7 @@ EVal.prototype.RSubDiv = function(bb, step, degu, degv, sizeu, sizev) {
 					i2 = h*C+col;
 					i3 = h1*C+col;
 					// bb[i1] = (bb[i2] + bb[i3])/2;
-					bb[i1].add(bb[i2],bb[i3]);
+					bb[i1].addVectors(bb[i2],bb[i3]);
 					bb[i1].divideScalar(2.0);
 					// for (m=0; m<DIM; m++)
 					// bb[i1][m] = (bb[i2][m] + bb[i3][m])/2;
@@ -685,7 +689,7 @@ EVal.prototype.RSubDiv = function(bb, step, degu, degv, sizeu, sizev) {
 					i3 = row*C+h1;
 
 					// bb[i1] = (bb[i2] + bb[i3])/2;
-					bb[i1].add(bb[i2],bb[i3]);
+					bb[i1].addVectors(bb[i2],bb[i3]);
 					bb[i1].divideScalar(2.0);
 
 					//for (m=0; m<DIM; m++)
@@ -714,9 +718,9 @@ EVal.prototype.evalPN = function(v00, v01, v10, P, N) {
 	var rv10 = v10.clone().divideScalar(v10.w);
 	var rv01 = v01.clone().divideScalar(v01.w);
 
-	rv10.subSelf(rv00);
-	rv01.subSelf(rv00);
-	var Normal = VVcross(rv10,rv01);
+	rv10.sub(rv00);
+	rv01.sub(rv00);
+	var Normal = this.VVcross(rv10,rv01);
 	Normal.normalize();
 	N.set(Normal.x,Normal.y,Normal.z);
 	P.copy(rv00);

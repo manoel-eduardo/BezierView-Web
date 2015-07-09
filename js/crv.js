@@ -134,10 +134,10 @@ CRV.prototype.krv = function(v00, Deriv, crv_result) {
 	crv_result.set(K,H,Max,Min);
 
 	// a special 
-	special_curvature =  ratio_a*K + ratio_b*H*H;
+	special_curvature =  this.ratio_a*K + this.ratio_b*H*H;
 	//printf("special_curvature : %f\n", special_curvature);
 
-	if( freshObject != 0){
+	if( this.freshObject != 0){
 		this.min_crv.w = special_curvature;
 		this.max_crv.w = special_curvature;
 	}
@@ -160,7 +160,7 @@ CRV.prototype.krv = function(v00, Deriv, crv_result) {
  */
 CRV.prototype.minmax = function(curv){
 	var i;
-	if(freshObject != 0)
+	if(this.freshObject != 0)
 	{
 		this.max_crv.copy(curv);
 		this.min_crv.copy(curv);
@@ -198,22 +198,22 @@ CRV.prototype.crv4 = function(v00, v01,v02, v10, v20, v11, degu, degv, crv_resul
 	var         degv1 = degv-1;
 
 	// first compute the derivatives 
-	Deriv[0][1] = (v01.clone().subSelf(v00)).multiplyScalar(degu);
+	Deriv[0][1] = (v01.clone().sub(v00)).multiplyScalar(degu);
 	if(degu1==0)
 		Deriv[0][2].set(0,0,0,0);
 	else
-		Deriv[0][2] = (v02.clone().subSelf(v01.clone().multiplyScalar(2)).addSelf(v00)).multiplyScalar(degu*degu1);
+		Deriv[0][2] = (v02.clone().sub(v01.clone().multiplyScalar(2)).add(v00)).multiplyScalar(degu*degu1);
 
-	Deriv[1][0] = (v10.clone().subSelf(v00)).multiplyScalar(degv);
+	Deriv[1][0] = (v10.clone().sub(v00)).multiplyScalar(degv);
 	if(degv1==0)
 		Deriv[2][0].set(0,0,0,0);
 	else
-		Deriv[2][0] = (v20.clone().subSelf(v10.clone().multiplyScalar(2)).addSelf(v00)).multiplyScalar(degv*degv1);
+		Deriv[2][0] = (v20.clone().sub(v10.clone().multiplyScalar(2)).add(v00)).multiplyScalar(degv*degv1);
 
-	Deriv[1][1] = v11.clone().subSelf(v01).subSelf(v10).addSelf(v00).multiplyScalar(degv*degu);
+	Deriv[1][1] = v11.clone().sub(v01).sub(v10).add(v00).multiplyScalar(degv*degu);
 
 	// calculate the curvature based on the Deriv
-	return krv(v00, Deriv, crv_result);
+	return this.krv(v00, Deriv, crv_result);
 };
 
 /* curvature routine for three sided patch
@@ -242,9 +242,9 @@ CRV.prototype.crv3 = function( v00, v10, v20, v01, v02, v11,deg, crv_result) {
 	
 	// first compute the derivatives 
     // Deriv[1][0][m] = deg*(v10[m]-v00[m]);
-	Deriv[1][0] = v10.clone().subSelf(v00).multiplyScalar(deg);
+	Deriv[1][0] = v10.clone().sub(v00).multiplyScalar(deg);
     // Deriv[0][1][m] = deg*(v01[m]-v00[m]);
-	Deriv[0][1] = v01.clone().subSelf(v00).multiplyScalar(deg);
+	Deriv[0][1] = v01.clone().sub(v00).multiplyScalar(deg);
 	if(d1==0) {
 		// Deriv[0][2][m] = Deriv[2][0][m] = Deriv[1][1][m] =0;
 	}
@@ -253,15 +253,15 @@ CRV.prototype.crv3 = function( v00, v10, v20, v01, v02, v11,deg, crv_result) {
 		// Deriv[2][0][m] = deg*d1*(v20[m]-2*v10[m]+v00[m]);
 		// Deriv[0][2][m] = deg*d1*(v02[m]-2*v01[m]+v00[m]);
 		// Deriv[1][1][m] = deg*d1*(v11[m]-v01[m]-v10[m]+v00[m]);
-		Deriv[2][0] = v20.clone().subSelf(v10.clone().multiplyScalar(2)).addSelf(v00).multiplyScalar(deg*d1);
-		Deriv[0][2] = v02.clone().subSelf(v01.clone().multiplyScalar(2)).addSelf(v00).multiplyScalar(deg*d1);
-		Deriv[1][1] = v11.clone().subSelf(v01).subSelf(v10).addSelf(v00).multiplyScalar(deg*d1);
+		Deriv[2][0] = v20.clone().sub(v10.clone().multiplyScalar(2)).add(v00).multiplyScalar(deg*d1);
+		Deriv[0][2] = v02.clone().sub(v01.clone().multiplyScalar(2)).add(v00).multiplyScalar(deg*d1);
+		Deriv[1][1] = v11.clone().sub(v01).sub(v10).add(v00).multiplyScalar(deg*d1);
 	}
     
 	
 	// calculate the curvature based on the Deriv
-    return krv(v00, Deriv, crv_result);     
-}
+    return this.krv(v00, Deriv, crv_result);     
+};
 
 
 CRV.prototype.crv_conv = function(in_crv,hi,low) {

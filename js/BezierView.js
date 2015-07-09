@@ -28,7 +28,8 @@ BezierView.prototype.checkWebGL = function(){
 /* Function responsable to call all functions to initialize the screen*/
 BezierView.prototype.init = function(render){
     //Hide the input textarea
-    $("#bvTextInput").css("display", "none");
+    $("#bvTextInput").hide();
+    $("#loading").hide();
     
     //Active Default Meshes Menu
     this.activeDefaultMeshesMenu();
@@ -50,8 +51,11 @@ BezierView.prototype.activeDefaultMeshesMenu = function(){
                     render.setMeshFromFile(filepath);
                     
                     //The the canvas as visible
-                    $("#bvTextInput").css("display", "none");
-                    $("#viewer").css("display", "block");
+                    $("#bvTextInput").hide();
+                    $("#viewer").show();
+                    
+                    //Finish loading
+                    $("#loading").hide();
             });
     });  
 };
@@ -60,10 +64,10 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
     //Script to open the textarea
     $("#bvTextInputMenu").on('click', function(){
         //Hide the canvas
-        $("#viewer").css("display", "none");
+        $("#viewer").hide();
         
         //Display the input
-        $("#bvTextInput").css("display", "block");
+        $("#bvTextInput").show();
         
         //Set the focus on the input textarea
         $("#bvInput").focus();
@@ -75,10 +79,10 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
         var data = $("#bvInput").val();
        
         //Hide the input
-        $("#bvTextInput").css("display", "none");
+        $("#bvTextInput").hide();
         
         //Display the canvas
-        $("#viewer").css("display", "block");
+        $("#viewer").show();
         
         //Clean the textarea
         $("#bvInput").val("");
@@ -90,10 +94,10 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
     //Script to close the textarea
     $("#closeBVTextInput").on('click', function(){
         //Hide the input
-        $("#bvTextInput").css("display", "none");
+        $("#bvTextInput").hide();
         
         //Display the canvas
-        $("#viewer").css("display", "block");
+        $("#viewer").show();
         
         //Clean text
         $("#bvInput").val("");

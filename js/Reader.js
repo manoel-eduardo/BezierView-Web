@@ -114,13 +114,115 @@ Reader.prototype.loadPolyhedronMesh = function(parser){
     geo.computeVertexNormals();
     
     //Return geometry object
-    return geo;
+    return {"type": 1, "geometry": geo};
 };
 
 /** Handles triangular bezier patches
 	Type 3
  **/
 Reader.prototype.loadTriangularMesh = function(parser){
+    var deg = parser.nextInt();
+    var vertices = [];
+    
+    // read all the control points
+    for(var i = 0; i < ((deg+2) * (deg+1)/2); i++) {
+        var x = parser.nextFloat();
+        var y = parser.nextFloat();
+        var z = parser.nextFloat();
+        vertices.push(new THREE.Vector4(x,y,z,1.0));
+    }
+    
+    return {"type":3,"deg":deg,"pts":vertices};
+};
+
+/** Handles tensor-product patches
+    Types 4, 5 and 8 for now  **/
+Reader.prototype.loadTensorProductMesh = function(type, parser){
+    // The degree in the u and v directionm
+	var degu,degv;
+
+	if(type == 4){ // same degree in both directions
+		degu = parser.nextInt();
+		degv = degu;
+	}
+	else{// type (5) and (8) - general patch and rational tensor-product
+		degu = parser.nextInt();
+		degv = parser.nextInt();
+	}
+
+	// read all the control points
+	var vertices = [];
+	for(var i = 0; i < (degu+1)*(degv+1); i++){
+		if(type == 8){ // rational tensor-product: also has weight value 
+            var x = parser.nextFloat();
+            var y = parser.nextFloat();
+            var z = parser.nextFloat();
+            var w = parser.nextFloat();
+            
+			vertices.push(new THREE.Vector4(x,y,z,w));
+		}else{
+            var x = parser.nextFloat();
+            var y = parser.nextFloat();
+            var z = parser.nextFloat();
+            
+			vertices.push(new THREE.Vector4(x,y,z,1.0));
+		}
+	}
+    
+    return {"type":type,"degu":degu, "degv":degv, "pts":vertices};
+};
+
+// -----------------------------------------------------------------------
+/* Load Polyhedron patch - Type 1 */
+/*Reader.prototype.loadPolyhedronMesh = function(parser){
+    //Retrieve # vertices and # faces
+    var numVertices, numFaces;
+    numVertices = parser.nextInt();
+    numFaces = parser.nextInt();
+    
+    //Create geometry
+    var geo = new THREE.Geometry();
+    
+    //Load vertices
+    for(var i = 0; i < numVertices; i++){
+        var x = parser.nextFloat();
+        var y = parser.nextFloat();
+        var z = parser.nextFloat();
+        geo.vertices.push(new THREE.Vector4(x,y,z,1.0));
+    }
+    
+    //Load faces
+    for(var i = 0; i < numFaces; i++){
+        var numVertFace = parser.nextInt();
+        if(numVertFace == 3){
+            geo.faces.push(new THREE.Face3(parser.nextInt(), parser.nextInt(), parser.nextInt()));
+        }else if(numVertFace == 4){
+            //Transforming one Face4 in two Face3
+            var a = parser.nextInt();
+            var b = parser.nextInt();
+            var c = parser.nextInt();
+            var d = parser.nextInt();
+            
+            geo.faces.push(new THREE.Face3(a, b, c));
+            geo.faces.push(new THREE.Face3(a, c, d));
+        }else{
+            alert("Error at create the object faces");
+            return null;
+        }
+    }
+    
+    //Compute normals
+    geo.computeFaceNormals();
+    geo.computeVertexNormals();
+    
+    //Return geometry object
+    return geo;
+};*/
+
+/** Handles triangular bezier patches
+	Type 3
+ **/
+/*Reader.prototype.loadTriangularMesh = function(parser){
     var deg = parser.nextInt();
     var vertices = [];
     
@@ -141,11 +243,11 @@ Reader.prototype.loadTriangularMesh = function(parser){
     geo.computeVertexNormals();
     
     return geo;
-};
+};*/
 
 /** Handles tensor-product patches
     Types 4, 5 and 8 for now  **/
-Reader.prototype.loadTensorProductMesh = function(type, parser){
+/*Reader.prototype.loadTensorProductMesh = function(type, parser){
     // The degree in the u and v directionm
 	var degu,degv;
 
@@ -186,7 +288,8 @@ Reader.prototype.loadTensorProductMesh = function(type, parser){
     geo.computeVertexNormals();
     
     return geo;
-};
+};*/
+// -----------------------------------------------------------------------
 
 /** Utility functions to trim a string**/
 function trim(str){

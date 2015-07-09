@@ -97,3 +97,9 @@ nav ul {
     border: 2px solid #a1a1a1;
     border-radius: 15px;
 }
+#loading{
+    right: 0;
+    position: absolute;
+    margin-top: -55px;
+    margin-right: 25px;
+}

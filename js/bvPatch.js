@@ -121,7 +121,7 @@ bvPatch.prototype.updateAttributes = function(){
 	this.material.uniforms.specular.value.copy(this.specular);
 	this.material.uniforms.shininess.value = this.shininess;
 
-	//render mode 
+	// render mode 
 	this.material.uniforms.renderMode.value = this.renderMode;
 
 	// curvature relate
