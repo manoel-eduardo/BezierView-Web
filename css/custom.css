@@ -1,11 +1,20 @@
+.navbar-brand img {
+  width: 2em;
+  height: 2em;
+  display: inline-block;
+  margin-right: 0.5em;
+}
 input[type="checkbox"] {
     display:none;
 }
+input[type="checkbox"],label {
+  font-weight: normal;
+}
 input[type="checkbox"] + label span {
     display:inline-block;
-    width:19px;
-    height:19px;
-    margin:-1px 4px 0 0;
+    width:23px;
+    height:23px;
+    margin:-1px 4px 0 -5px;
     vertical-align:middle;
     background:url('icons/glyphicons-154-unchecked.png') left top no-repeat;
     cursor:pointer;
