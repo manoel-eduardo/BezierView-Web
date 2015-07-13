@@ -6,12 +6,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         
-        <!-- Customs stylesheet -->
-        <link rel="stylesheet" href="css/main.css" />
-        <link rel="stylesheet" href="css/icons.css" />
         
         <!-- jQuery and jQuery UI libraries -->
         <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+        
+        <!-- Bootstrap libraries -->
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <!--script type="text/javascript" src="js/bootstrap.min.js"></script-->
+        
+        <!-- Customs stylesheet -->
+        <link rel="stylesheet" href="css/custom.css">
+        <!-- link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="css/icons.css" /-->
         
         <!-- Three.js -->
         <script type="text/javascript" src="js/three.js"></script>
@@ -59,8 +66,56 @@
         </script>
     </head>
     <body>
-        <nav><!-- MENU -->
-            <div class="apptitle">BezierView WebGL</div>
+        <nav class="navbar navbar-default navbar-top"><!-- MENU -->
+            <div class="container-fluid">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href=".">
+                    <img src="favicon.ico">BezierView</a>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mesh<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="#" class="deafult-mesh" filepath="data/cube.bv">Cube (Polyhedron)</a></li>
+                            <li><a href="#" class="deafult-mesh" filepath="data/dtorus.bv">Double torus</a></li>
+                            <li><a href="#" class="deafult-mesh" filepath="data/hand.bv">Hand (Rational)</a></li>
+                            <li><a href="#" class="deafult-mesh" filepath="data/tri1.bv">Triangular Bezier</a></li>
+                            <li><a href="#" class="deafult-mesh" filepath="data/hex2.bv">Hex2 (Tensor-product)</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#" id="bvTextInputMenu">BV Text Input</a></li>
+                          </ul>
+                        </li>
+                        
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Display<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">
+                                    <input type="checkbox" id="polygonFace" checked="checked"/>
+                                    <label for="polygonFace"><span></span>Polygon Face</label>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <input type="checkbox" id="polygonMesh" checked="checked"/>
+                                    <label for="polygonMesh"><span></span>Polygon Mesh</label>
+                                </a>
+                            </li>
+                          </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+            <!--div class="apptitle">BezierView WebGL</div>
             <ul>
                 <li>
                     <a href="#">File</a>
@@ -119,28 +174,8 @@
                         </li>
                     </ul>
                 </li>
-                <!--li>
-                    <a href="#">View</a>
-                    <ul>
-                        <li>
-                            <a href="#">Regular</a>
-                        </li>
-                        <li>
-                            <a href="#">Curvature</a>
-                        </li>
-                        <li>
-                            <a href="#">Highlight Lines</a>
-                        </li>
-                        <li>
-                            <a href="#">Reflection Lines</a>
-                        </li>
-                    </ul>
-                </li-->
             </ul>
         </nav><!-- end MENU BAR -->
-        <div id="loading" class="right">
-            <img src="css/icons/loading.gif"></img>
-        </div>
         <div id="viewer" >
             <div id="glviewer"></div>
         </div>

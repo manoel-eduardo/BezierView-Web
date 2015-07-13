@@ -61,9 +61,9 @@ Render.prototype.init = function() {
 	pointLight2.position.z = 0;
     this.scene.add( pointLight2 );
 
-    //Initializate variables
-    this.show_patch         = true;
-    this.show_controlMesh   = true;
+    //Initializate variables accordint to the menu
+    this.show_patch         = $("#polygonFace").is(":checked");
+    this.show_controlMesh   = $("#polygonMesh").is(":checked");
     
     //this.show_curvature     = false;
     

@@ -105,11 +105,11 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
 };
 
 BezierView.prototype.activeDisplatMenu = function(render){
-    $("#polygonFace").on('change', function(){
+    $("#polygonFace").on('click', function(){
         render.toggle_patches(true);
     });
     
-    $("#polygonMesh").on('change', function(){
+    $("#polygonMesh").on('click', function(){
         render.toggle_controlMeshes(true);
     });
 };
