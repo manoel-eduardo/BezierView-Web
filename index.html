@@ -110,6 +110,10 @@
                           </ul>
                         </li>
                     </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#" data-toggle="modal" data-target="#modalAbout">About</a></li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -137,6 +141,51 @@
               </div>
             </div>
           </div>
+        </div>
+        
+        <!-- About Modal -->
+        <div class="modal fade" id="modalAbout" tabindex="-1" role="dialog" aria-labelledby="modalAboutLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                        <h3>License</h3>
+                        <p>Copyright (C) 2015 SurfLab, University of Florida.</p>
+                        
+                        <p>This program is free for educational/research purpose. You will need to gain permissions from authors before you can use this program or any part of the source code for commercial usage.</p>
+                        
+                        <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.</p>
+                        
+                        <hr/>
+                        
+                        <h3>README</h3>
+                        <p>This is an implementation of SurfLab's BezierView using WebGL and Three.js</p>
+                        <p><a href="http://www.cise.ufl.edu/research/SurfLab/bview/">http://www.cise.ufl.edu/research/SurfLab/bview/</a></p>
+                        
+                        <p>Versions:</p>
+                        <p>
+                            <ul>
+                                <li>
+                                    Eduardo development version (this version):<br/>
+                                    <a href="https://github.com/manoel-eduardo/BezierView-Web">https://github.com/manoel-eduardo/BezierView-Web</a>
+                                </li>
+                                <li>
+                                    Shayan development version:<br/>
+                                    <a href="http://dl.dropbox.com/u/6665854/BezierView/BezierView.html">http://dl.dropbox.com/u/6665854/BezierView/BezierView.html</a>
+                                </li>
+                                <li>
+                                    Saleh development version:<br/>
+                                    <a href="http://www.cise.ufl.edu/~saleh/BezierView/">http://www.cise.ufl.edu/~saleh/BezierView/</a>
+                                </li>
+                            </ul>
+                        </p>
+                        <p>Controls:</p>
+                        <p>- Use mouse buttons to rotate, pan and zoom</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+            </div>
         </div>
     </body>    
 </html>
