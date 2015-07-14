@@ -27,10 +27,6 @@ BezierView.prototype.checkWebGL = function(){
 
 /* Function responsable to call all functions to initialize the screen*/
 BezierView.prototype.init = function(render){
-    //Hide the input textarea
-    $("#bvTextInput").hide();
-    $("#loading").hide();
-    
     //Active Default Meshes Menu
     this.activeDefaultMeshesMenu();
     
@@ -61,29 +57,11 @@ BezierView.prototype.activeDefaultMeshesMenu = function(){
 };
 
 BezierView.prototype.activeBVInputTextMenu = function(render){
-    //Script to open the textarea
-    $("#bvTextInputMenu").on('click', function(){
-        //Hide the canvas
-        $("#viewer").hide();
-        
-        //Display the input
-        $("#bvTextInput").show();
-        
-        //Set the focus on the input textarea
-        $("#bvInput").focus();
-    });
-    
     //Script to load the textarea information
     $("#loadBVTextInput").on('click', function(){
         //Retrieve the data
         var data = $("#bvInput").val();
        
-        //Hide the input
-        $("#bvTextInput").hide();
-        
-        //Display the canvas
-        $("#viewer").show();
-        
         //Clean the textarea
         $("#bvInput").val("");
         
@@ -93,12 +71,6 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
     
     //Script to close the textarea
     $("#closeBVTextInput").on('click', function(){
-        //Hide the input
-        $("#bvTextInput").hide();
-        
-        //Display the canvas
-        $("#viewer").show();
-        
         //Clean text
         $("#bvInput").val("");
     });

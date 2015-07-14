@@ -88,7 +88,7 @@
                             <li><a href="#" class="deafult-mesh" filepath="data/tri1.bv">Triangular Bezier</a></li>
                             <li><a href="#" class="deafult-mesh" filepath="data/hex2.bv">Hex2 (Tensor-product)</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#" id="bvTextInputMenu">BV Text Input</a></li>
+                            <li><a href="#" id="bvTextInputMenu" data-toggle="modal" data-target="#modalBVInputText">BV Text Input</a></li>
                           </ul>
                         </li>
                         
@@ -113,79 +113,30 @@
                 </div>
             </div>
         </nav>
-            <!--div class="apptitle">BezierView WebGL</div>
-            <ul>
-                <li>
-                    <a href="#">File</a>
-                    <ul>
-                        <li>
-                            <a href="#">Default Meshes<span class="icon-arrow-menu"></span></a>
-                            <ul>
-                                <li class="deafult-mesh" filepath="data/cube.bv">
-                                    <a href="#">Cube (Polyhedron)</a>
-                                </li>
-                                <li class="deafult-mesh" filepath="data/dtorus.bv">
-                                    <a href="#">Double torus</a>
-                                </li>
-                                <li class="deafult-mesh" filepath="data/hand.bv">
-                                    <a href="#">Hand (Rational)</a>
-                                </li>
-                                <li class="deafult-mesh" filepath="data/tri1.bv">
-                                    <a href="#">Triangular Bezier</a>
-                                </li>
-                                <li class="deafult-mesh" filepath="data/hex2.bv">
-                                    <a href="#">Hex2 (Tensor-product)</a>
-                                </li>
-                            </ul>
-                        </li>
-                    
-                        <li id="bvTextInputMenu">
-                            <a href="#">BV Text Input</a>
-                        </li>   
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Display</a>
-                    <ul>
-                        <li>
-                            <a href="#">
-                                <input type="checkbox" id="polygonFace" checked="checked"/>
-                                <label for="polygonFace"><span></span>Polygon Face</label>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <input type="checkbox" id="polygonMesh" checked="checked"/>
-                                <label for="polygonMesh"><span></span>Polygon Mesh</label>
-                            </a>
-                        </li>
-                        <li>
-                        <a href="#">
-                            <hr />
-                        </a>
-                        </li>
-                        <li>
-                            <a href="#">Reflection Lines</a>
-                        </li>
-                        <li>
-                            <a href="#">Highlight Lines</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav><!-- end MENU BAR -->
+        
         <div id="viewer" >
             <div id="glviewer"></div>
         </div>
-            
-        <div id="bvTextInput">
-            <h3>Enter with a BezierViewer model</h3>
-            <textarea id="bvInput" rows="20" cols="100"></textarea>
-            <br/>
-            <div class="right" style="  margin-right: 40px; margin-top: 10px;">
-                <button type="button" id="loadBVTextInput">Load</button>
-                <button type="button" id="closeBVTextInput">Close</button>
+        
+        <!-- BV Input Text Modal -->
+        <div class="modal fade" id="modalBVInputText" tabindex="-1" role="dialog" aria-labelledby="modalBVInputTextLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Bezier Viewer Input Text</h4>
+              </div>
+              <div class="modal-body">
+                <center>
+                    <textarea id="bvInput" rows="20" cols="60"></textarea>
+                </center>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="loadBVTextInput" class="btn btn-primary" data-dismiss="modal">Load</button>
+                <button type="button" id="closeBVTextInput" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
             </div>
+          </div>
         </div>
     </body>    
 </html>

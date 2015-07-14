@@ -47,7 +47,7 @@ Render.prototype.init = function() {
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     
     //Orbit Control
-    this.controls = new THREE.OrbitControls( this.camera );
+    this.controls = new THREE.OrbitControls( this.camera, $("#viewer").get(0));
     this.controls.addEventListener( 'change', this.render.bind(this) );
 
     // Lights
