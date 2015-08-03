@@ -4,6 +4,7 @@ function Render(){
     
     /* the meshes */
     var patch_mesh, curvature_mesh, current_mesh;
+    var patch_meshes, control_meshes;
     
     /* The 3DObjects*/
     var patch_object, control_object, root_object;
@@ -66,7 +67,6 @@ Render.prototype.init = function() {
     this.show_controlMesh   = $("#polygonMesh").is(":checked");
     
     //this.show_curvature     = false;
-    
     /*this.renderer.sortObjects = false;
     this.renderer.setFaceCulling(false);*/
 
@@ -121,6 +121,9 @@ Render.prototype.loadMeshFromFile = function(file, render) {
 
 /** Load Mesh from string data **/
 Render.prototype.loadMesh = function(data) {
+    //Initialize vector to store the meshes
+    this.patch_meshes = [];
+
     //Creating a new 3DObjects
     this.root_object = new THREE.Object3D();
     this.patch_object = new THREE.Object3D();
@@ -135,8 +138,8 @@ Render.prototype.loadMesh = function(data) {
     var patches = this.reader.getPatches(data);
 
     //Creating a defatul material to fill the mesh
-    var material = new THREE.MeshNormalMaterial();
-    //var material = new THREE.MeshBasicMaterial( { color: 0xff000, wireframe: false } );
+    var material = new THREE.MeshPhongMaterial();
+    //var material = new THREE.MeshBasicMaterial( { color: 0xB4000, wireframe: false } );
     var wireframeMaterial = new THREE.MeshLambertMaterial({ wireframeLinewidth: 5, color: 0x000000, wireframe: true });
     
     
@@ -156,10 +159,17 @@ Render.prototype.loadMesh = function(data) {
 			control_geometry = evaluator.eval_control_mesh(patches[i].type, patches[i].deg, patches[i].pts);
 		else
 			control_geometry = evaluator.eval_control_mesh(patches[i].type, [patches[i].degu,patches[i].degv], patches[i].pts);
-        
-        this.patch_object.add(new THREE.Mesh( patch_mesh.geometry,  material));
+
+        //Add the current meshes to the 3DObject to render in scene
+        //this.patch_object.add(new THREE.Mesh( patch_mesh.geometry,  mat));
+        this.patch_object.add(patch_mesh);
         this.control_object.add(new THREE.Mesh( control_geometry,  wireframeMaterial));
+        
+        //Store the meshes in the array to future manipulation
+        this.patch_meshes.push(patch_mesh);
     }
+    
+    this.setDoubleSided();
 
     // proper viewing of patches and control mesh
 	this.toggle_patches();
@@ -171,6 +181,14 @@ Render.prototype.loadMesh = function(data) {
     
     //Adding the root_object (Object3D) to the scene
     this.scene.add(this.root_object);
+};
+
+Render.prototype.setDoubleSided = function(){
+    this.patch_object.traverse( function( node ) {
+        if( node.material ) {
+            node.material.side = THREE.DoubleSide;
+        }
+    });
 };
 
 /** Toggle viewing patches **/

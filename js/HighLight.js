@@ -6,7 +6,6 @@ function HighLight(){
     var REFLECTLINE = 1;
 }
 
-
 HighLight.prototype.calc_D = function(P, N, A, H){
 	// // according to Beier/Chen's 1994 CAD paper
 	/*
@@ -43,7 +42,6 @@ HighLight.prototype.calc_D = function(P, N, A, H){
 	}
 };
 
-//
 HighLight.prototype.calc_ref_line = function(P, N, A, H, eye) {
 	var RefN ;
 	var th;
@@ -76,7 +74,6 @@ HighLight.prototype.det4 = function(x11,  x12,  x13,  x14,
 		x41*x32*x14*x23;
 	return t0;
 };
-
 
 // solve a 4x4 linear system
 // i.e. Ay=x where A is a 4x4 matrix, x is a length 4 vector
@@ -114,7 +111,6 @@ HighLight.prototype.Solve4 = function(A, x) {
 		x[i] = y[i];
 };
 
-
 HighLight.prototype.calc_HA = function(patch,A,H) {
 	var array_A = [0.0,  0.0, 40.0, 1.0];
 	var array_H = [0.0,  1.0,  0.0, 0.0];
@@ -123,10 +119,10 @@ HighLight.prototype.calc_HA = function(patch,A,H) {
 
 	if(patch._modelViewMatrix == undefined){
 		var temp_matrix = new THREE.Matrix4();
-		temp_matrix.flattenToArray(mv_matrix);
+		temp_matrix.flattenToArrayOffset(mv_matrix, 0);
 	}
 	else
-		patch._modelViewMatrix.flattenToArray(mv_matrix);
+		patch._modelViewMatrix.flattenToArrayOffset(mv_matrix, 0);
 
 
 	this.Solve4(mv_matrix, array_A);
@@ -140,7 +136,6 @@ HighLight.prototype.calc_HA = function(patch,A,H) {
 //
 //  plot the high light
 //
-
 HighLight.prototype.eval_highlight = function(highlight_type, patch, funcs) {
 	var eye = new THREE.Vector4(0, 0, 1000,1);
 
@@ -164,7 +159,6 @@ HighLight.prototype.eval_highlight = function(highlight_type, patch, funcs) {
 					console.log('hl_error');
 					return; // return if the patch is numerically unstable,
 				}
-
 			}
 			else {
 				func = this.calc_ref_line( P, N, A, H, eye)/hl_step;

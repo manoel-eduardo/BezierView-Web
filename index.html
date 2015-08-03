@@ -1,5 +1,10 @@
 <!doctype html>
-
+<!-- 
+shaders
+    4 cubes example: http://mrdoob.github.io/three.js/examples/webgl_shader2.html
+    Tutorials: https://stemkoski.github.io/Three.js/
+    Sand box: http://blog.cjgammon.com/three-js-custom-shader-material/
+-->
 <html lang="en">
     <head>
         <title>BezierView</title>
@@ -37,6 +42,7 @@
         
         <!-- Custom scripts-->
         <script type="text/javascript" src="js/BezierView.js"></script>
+        
         <script>
                 $(document).ready(function(){
                         //Creating BezierView and initialization components on screen
@@ -93,7 +99,7 @@
                         </li>
                         
                         <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Display<span class="caret"></span></a>
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Show<span class="caret"></span></a>
                           <ul class="dropdown-menu">
                             <li>
                                 <a href="#">
@@ -105,6 +111,36 @@
                                 <a href="#">
                                     <input type="checkbox" id="polygonMesh" checked="checked"/>
                                     <label for="polygonMesh"><span></span>Polygon Mesh</label>
+                                </a>
+                            </li>
+                          </ul>
+                        </li>
+                        
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" class="view-option" view="regular">
+                                    <input type="radio" id="viewRegular" name="viewOption" checked="checked"/>
+                                    <label for="viewRegular"><span></span>Regular</label>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="view-option" view="curvature">
+                                    <input type="radio" id="viewCurvature" name="viewOption"/>
+                                    <label for="viewCurvature"><span></span>Curvature</label>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="view-option" view="highlight">
+                                    <input type="radio" id="viewHighlight" name="viewOption"/>
+                                    <label for="viewHighlight"><span></span>Highlight Lines</label>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="view-option" view="reflection">
+                                    <input type="radio" id="viewReflection" name="viewOption"/>
+                                    <label for="viewReflection"><span></span>Reflection Lines</label>
                                 </a>
                             </li>
                           </ul>
@@ -176,7 +212,7 @@
                         <p>Versions:</p>
                         <ul>
                             <li>
-                                Eduardo development version (this version):<br/>
+                                Eduardo development version (current version):<br/>
                                 <a href="https://github.com/manoel-eduardo/BezierView-Web">https://github.com/manoel-eduardo/BezierView-Web</a>
                             </li>
                             <li>

@@ -34,7 +34,10 @@ BezierView.prototype.init = function(render){
     this.activeBVInputTextMenu(render);
     
     //Active Display Menu
-    this.activeDisplatMenu(render);
+    this.activeShowMenu(render);
+    
+    //Active View Meny
+    this.activeViewMenu(render);
 };
 
 BezierView.prototype.activeDefaultMeshesMenu = function(){
@@ -49,9 +52,9 @@ BezierView.prototype.activeDefaultMeshesMenu = function(){
                     //The the canvas as visible
                     $("#bvTextInput").hide();
                     $("#viewer").show();
-                    
-                    //Finish loading
-                    $("#loading").hide();
+
+                    //Setting regular view
+                    $("#viewRegular").click();
             });
     });  
 };
@@ -67,6 +70,9 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
         
         //Load Mesh
         render.setMeshFromText(data);
+        
+        //Setting regular view
+        $("#viewRegular").click();
     });
     
     //Script to close the textarea
@@ -76,12 +82,40 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
     });
 };
 
-BezierView.prototype.activeDisplatMenu = function(render){
+BezierView.prototype.activeShowMenu = function(render){
     $("#polygonFace").on('click', function(){
         render.toggle_patches(true);
     });
     
     $("#polygonMesh").on('click', function(){
         render.toggle_controlMeshes(true);
+    });
+};
+
+BezierView.prototype.activeViewMenu = function(render){
+    $(".view-option").each(function(){
+        $(this).on('click', function(){
+            var view = $(this).attr("view");
+            switch(view){
+                case "regular":
+                    render.setRenderMode(bvPatch.Normal);
+                    break;
+                    
+                case "curvature":
+                    render.setRenderMode(bvPatch.CurvatureColor);
+                    break;
+                    
+                case "highlight":
+                    render.setRenderMode(bvPatch.HighlightLine);
+                    break;
+                    
+                case "reflection":
+                    render.setRenderMode(bvPatch.ReflectionLine);
+                    break;
+                    
+                default:
+                    alert("Error to set view")
+            }
+        });
     });
 };
