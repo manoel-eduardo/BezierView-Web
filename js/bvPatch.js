@@ -54,6 +54,7 @@ bvPatch = function(patch,parameters){
 			attributes.crv.value[i] = new THREE.Vector4();
 	}*/
 
+    //Defining material
     var material;
     var bvMaterial = this.getBVMaterial(patch_geo);
     var phongMaterial = this.getPhongMaterial();
@@ -64,17 +65,14 @@ bvPatch = function(patch,parameters){
         material = bvMaterial;
     }
 
-    console.log(material);
-
+    //Creating mesh
 	THREE.Mesh.call( this, patch_geo, material);
-
-	this.doubleSided = true;
 	
+	//Saving the materials
 	this.bvMaterial = bvMaterial;
 	this.phongMaterial = phongMaterial;
 	
 	this.setRenderMode(this.renderMode);
-	this.updateAttributes();
 };
 
 bvPatch.prototype = new THREE.Mesh();
@@ -102,6 +100,7 @@ bvPatch.prototype.getBVMaterial = function(patch_geo){
 		fragmentShader: fragmentShader,
         perPixel:       true,
 		lights:         true,
+		side:           THREE.DoubleSide,
 	});
 
 	// initial the crv array
@@ -117,7 +116,9 @@ bvPatch.prototype.getBVMaterial = function(patch_geo){
 };
 
 bvPatch.prototype.getPhongMaterial = function(){
-    return new THREE.MeshPhongMaterial();
+    return new THREE.MeshPhongMaterial({
+        side: THREE.DoubleSide,
+    });
 };
 
 bvPatch.prototype.getRenderMode = function(){
@@ -130,14 +131,14 @@ bvPatch.prototype.setRenderMode = function(mode){
 		
 	this.renderMode = mode;
     
+    this.updateAttributes();
+    
 	switch(mode){
     	case bvPatch.HighlightLine:
     	case bvPatch.ReflectionLine:
     		this.updateHighlight();
     		break;
 	}
-	
-	this.updateAttributes();
 };
 
 bvPatch.prototype.setCurvatureRange = function(minc,maxc){

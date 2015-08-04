@@ -168,8 +168,6 @@ Render.prototype.loadMesh = function(data) {
         //Store the meshes in the array to future manipulation
         this.patch_meshes.push(patch_mesh);
     }
-    
-    this.setDoubleSided();
 
     // proper viewing of patches and control mesh
 	this.toggle_patches();
@@ -181,14 +179,6 @@ Render.prototype.loadMesh = function(data) {
     
     //Adding the root_object (Object3D) to the scene
     this.scene.add(this.root_object);
-};
-
-Render.prototype.setDoubleSided = function(){
-    this.patch_object.traverse( function( node ) {
-        if( node.material ) {
-            node.material.side = THREE.DoubleSide;
-        }
-    });
 };
 
 /** Toggle viewing patches **/
