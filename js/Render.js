@@ -39,7 +39,7 @@ Render.prototype.init = function() {
 
     // Camera
     this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.01, 1000 );
-	this.camera.position.z = 5;
+	this.camera.position.z = 10;
     this.scene.add( this.camera );
 	
 	//Create render

@@ -30,6 +30,9 @@ BezierView.prototype.init = function(render){
     //Active Default Meshes Menu
     this.activeDefaultMeshesMenu();
     
+    //Active Load from file Menu
+    this.activeLoadFileMenu(render);
+    
     //Active BV Input Text Menu
     this.activeBVInputTextMenu(render);
     
@@ -57,6 +60,25 @@ BezierView.prototype.activeDefaultMeshesMenu = function(){
                     $("#viewRegular").click();
             });
     });  
+};
+
+BezierView.prototype.activeLoadFileMenu = function(render){
+    //Open input file dialog box when click in the link
+    $("#loadFile").on('click', function(){
+        $("#fileInput").click();
+    });
+    
+    $("#fileInput").on('change', function(){
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+		var reader = new FileReader();
+
+		reader.onload = function(e) {
+			render.setMeshFromText(reader.result);
+		};
+
+		reader.readAsText(file);
+    });
 };
 
 BezierView.prototype.activeBVInputTextMenu = function(render){

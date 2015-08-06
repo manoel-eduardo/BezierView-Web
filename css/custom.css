@@ -4,7 +4,24 @@
   display: inline-block;
   margin-right: 0.5em;
 }
+/* ICONS */
+.file-import{
+    display:inline-block;
+    width:23px;
+    height:23px;
+    margin:-1px 4px 0 -5px;
+    vertical-align:middle;
+    background:url('icons/glyphicons-359-file-import.png') left top no-repeat;
+}
 
+.pencil-icon{
+    display:inline-block;
+    width:25px;
+    height:25px;
+    margin:-1px 4px 0 -5px;
+    vertical-align:middle;
+    background:url('icons/glyphicons-31-pencil.png') left top no-repeat;
+}
 /*CUSTOM CHECKBOX*/
 input[type="checkbox"] {
     display:none;

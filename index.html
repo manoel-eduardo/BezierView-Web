@@ -88,13 +88,23 @@ shaders
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mesh<span class="caret"></span></a>
                           <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" id="loadFile"><span class="file-import"></span>Load from file</a>
+                                <input type="file" id="fileInput" style="display:none">
+                            </li>
+                            <li>
+                                <a href="#" id="bvTextInputMenu" data-toggle="modal" data-target="#modalBVInputText">
+                                    <span class="pencil-icon"></span>BV Text Input
+                                </a>
+                            </li>
+                            
+                            <li role="separator" class="divider"></li>
+                            
                             <li><a href="#" class="deafult-mesh" filepath="data/cube.bv">Cube (Polyhedron)</a></li>
                             <li><a href="#" class="deafult-mesh" filepath="data/dtorus.bv">Double torus</a></li>
                             <li><a href="#" class="deafult-mesh" filepath="data/hand.bv">Hand (Rational)</a></li>
                             <li><a href="#" class="deafult-mesh" filepath="data/tri1.bv">Triangular Bezier</a></li>
                             <li><a href="#" class="deafult-mesh" filepath="data/hex2.bv">Hex2 (Tensor-product)</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#" id="bvTextInputMenu" data-toggle="modal" data-target="#modalBVInputText">BV Text Input</a></li>
                           </ul>
                         </li>
                         
