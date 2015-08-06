@@ -1,6 +1,6 @@
 function Render(){
     /* Variables for the scene */
-    var camera, scene, renderer, geometry, material, regular_material, curvature_material, controls, pointLight;
+    var camera, scene, renderer, geometry, regular_material, curvature_material, controls, pointLight;
     
     /* the meshes */
     var patch_mesh, curvature_mesh, current_mesh;
@@ -10,7 +10,7 @@ function Render(){
     var patch_object, control_object, root_object;
     
     /* User-dependent variables */
-    var show_curvature, show_controlMesh, show_patch;
+    var show_controlMesh, show_patch;
     
     var subdivision_level = 5;
     
@@ -26,7 +26,7 @@ function Render(){
     var triangular  = "data/tri1.bv";
     
     /** render mode **/
-    //var render_mode = bvPatch.normal;
+    var render_mode = bvPatch.CurvatureColor;
 }
     
 /** The initialization function **/
@@ -66,7 +66,6 @@ Render.prototype.init = function() {
     this.show_patch         = $("#polygonFace").is(":checked");
     this.show_controlMesh   = $("#polygonMesh").is(":checked");
     
-    //this.show_curvature     = false;
     /*this.renderer.sortObjects = false;
     this.renderer.setFaceCulling(false);*/
 
@@ -138,13 +137,11 @@ Render.prototype.loadMesh = function(data) {
     var patches = this.reader.getPatches(data);
 
     //Creating a defatul material to fill the mesh
-    var material = new THREE.MeshPhongMaterial();
-    //var material = new THREE.MeshBasicMaterial( { color: 0xB4000, wireframe: false } );
     var wireframeMaterial = new THREE.MeshLambertMaterial({ wireframeLinewidth: 5, color: 0x000000, wireframe: true });
-    
     
     //Evaluator object
     evaluator = new EVal();
+    evaluator.init();
     
     //Adding all meshes loaded from the file to the Object3D
     for(var i = 0; i < patches.length; i++){
@@ -161,14 +158,13 @@ Render.prototype.loadMesh = function(data) {
 			control_geometry = evaluator.eval_control_mesh(patches[i].type, [patches[i].degu,patches[i].degv], patches[i].pts);
 
         //Add the current meshes to the 3DObject to render in scene
-        //this.patch_object.add(new THREE.Mesh( patch_mesh.geometry,  mat));
         this.patch_object.add(patch_mesh);
         this.control_object.add(new THREE.Mesh( control_geometry,  wireframeMaterial));
         
         //Store the meshes in the array to future manipulation
         this.patch_meshes.push(patch_mesh);
     }
-
+    
     // proper viewing of patches and control mesh
 	this.toggle_patches();
 	this.toggle_controlMeshes();
@@ -179,6 +175,9 @@ Render.prototype.loadMesh = function(data) {
     
     //Adding the root_object (Object3D) to the scene
     this.scene.add(this.root_object);
+    
+    //Bug: the mesh has to start loading by the curvature mode view
+    $("#viewCurvature").click();
 };
 
 /** Toggle viewing patches **/

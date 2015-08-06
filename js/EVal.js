@@ -1,6 +1,11 @@
 function EVal(){
-
+    var crv;
 }
+
+EVal.prototype.init = function(){
+    this.crv = new CRV();
+    this.crv.init();
+};
 
 EVal.prototype.eval_patch = function(patch, subDepth){
 	var size;
@@ -254,9 +259,10 @@ EVal.prototype.eval_triangular = function(patch, subDepth) {
 			// at the (u,v) parameter
 			// TODO: Curvature
             //h = this.crv3 (V00, V01, V02, V10, V20, V11, deg, crv_array[loc]);
-            crvObj = new CRV();
-            crvObj.init();
-            h = crvObj.crv3 (V00, V01, V02, V10, V20, V11, deg, crv_array[loc]);
+            
+            /*crvObj = new CRV();
+            crvObj.init();*/
+            h = this.crv.crv3 (V00, V01, V02, V10, V20, V11, deg, crv_array[loc]);
             //printf("value %f at %d \n", h, loc);
             loc ++;
         }
@@ -416,8 +422,9 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 	bigstepu = degu;	/* distance between patches -> column direction */
 	bigstepv = degv;	/* distance between patches -> row direction */
 
-    crv = new CRV();
-    crv.init();
+    /*crv = new CRV();
+    crv.init();*/
+    
 	// st==1
 	for (var r=0; r<sizev; r += bigstepv)  // row
 	{
@@ -428,7 +435,7 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 			loc = (c/bigstepu*C + r/bigstepv) ;
 
 			// curvature
-			h = crv.crv4(bb[rs+c],bb[rs+c+st],bb[rs+c+2*st], // curvature
+			h = this.crv.crv4(bb[rs+c],bb[rs+c+st],bb[rs+c+2*st], // curvature
 					bb[r1+c],bb[r2+c],bb[r1+c+st],degu, degv, crv_array[loc]);
 
 			this.evalPN(bb[rs+c], bb[r1+c], bb[rs+c+st], eval_P[loc],
@@ -440,7 +447,7 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 		// last col _| note: stencil is rotated by 90 degrees c = sizeu;
 		loc = (c/bigstepu*C + r/bigstepv) ;
 
-		h = crv.crv4(bb[rs+c],bb[r1+c],bb[r2+c], bb[rs+c-st],
+		h = this.crv.crv4(bb[rs+c],bb[r1+c],bb[r2+c], bb[rs+c-st],
 				bb[rs+c-2*st],bb[r1+c-st],degv, degu, crv_array[loc]);
 
 		this.evalPN(bb[rs+c], bb[rs+c-st], bb[r1+c], eval_P[loc],
@@ -455,7 +462,7 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 	for (var c = 0; c<sizeu; c += bigstepu) {
 		loc = (c/bigstepu*C + r/bigstepv) ;
 
-		h =crv.crv4(bb[rs+c],bb[r1+c],bb[r2+c], bb[rs+c+st],  	// curvature
+		h = this.crv.crv4(bb[rs+c],bb[r1+c],bb[r2+c], bb[rs+c+st],  	// curvature
 				bb[rs+c+2*st],bb[r1+c+st],degv, degu, crv_array[loc]);
 
 		this.evalPN(bb[rs+c], bb[rs+c+st], bb[r1+c], eval_P[loc],
@@ -467,7 +474,7 @@ EVal.prototype.eval_tensor_product = function(patch, subDepth) {
 	c = sizeu;
 	loc = (c/bigstepu*C + r/bigstepv) ;
 
-	h = crv.crv4(bb[rs+c],bb[rs+c-st],bb[rs+c-2*st], bb[r1+c],  // curvature
+	h = this.crv.crv4(bb[rs+c],bb[rs+c-st],bb[rs+c-2*st], bb[r1+c],  // curvature
 			bb[r2+c], bb[r1+c-st],degu, degv, crv_array[loc]);
 
 	this.evalPN(bb[rs+c], bb[r1+c], bb[rs+c-st],  eval_P[loc],
@@ -726,4 +733,12 @@ EVal.prototype.evalPN = function(v00, v01, v10, P, N) {
 	P.copy(rv00);
 	//console.log("Inside evalPN: " + P.x + ", " + P.y + ", " + P.z);
 	//P.divideScalar(P.w);
+};
+
+EVal.prototype.getMinCrv = function(){
+    return this.crv.min_crv;
+};
+
+EVal.prototype.getMaxCrv = function(){
+    return this.crv.max_crv;
 };
