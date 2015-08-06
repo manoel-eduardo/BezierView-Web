@@ -44,9 +44,6 @@ bvPatch = function(patch,parameters){
 	
 	attributes.crv.needsUpdate = true;
 	
-    var vertexShader = test.vertexShader;
-    var fragmentShader = test.fragmentShader;
-	
 	var bvMaterial = new THREE.ShaderMaterial({
 		uniforms:       THREE.UniformsUtils.merge( [
             THREE.UniformsUtils.clone(bvshader.uniforms),
@@ -57,8 +54,8 @@ bvPatch = function(patch,parameters){
 		]),
 		
 		attributes:     attributes,
-		vertexShader:   vertexShader,
-		fragmentShader: fragmentShader,
+		vertexShader:   bvshader.vertexShader,
+		fragmentShader: bvshader.fragmentShader,
         perPixel:       true,
 		lights:         true,
 		side:           THREE.DoubleSide,
@@ -70,8 +67,6 @@ bvPatch = function(patch,parameters){
 	//Saving the materials
 	this.bvMaterial = bvMaterial;
 	this.phongMaterial = this.getPhongMaterial();
-	
-	//this.setRenderMode(this.renderMode);
 };
 
 bvPatch.prototype = new THREE.Mesh();
@@ -223,187 +218,6 @@ bvshader = {
 		},
 	] ),
 
-	/*vertexShader: [
-        "#define  PHONG_PER_PIXEL",
-		"varying vec3 vViewPosition;",
-		"varying vec3 vNormal;",
-		"varying vec3 vFixedNormal;",
-		"varying vec3 vColor;",
-		"varying vec4 vPos;",
-		//"varying float p_hr_val;",
-		//"attribute float hr_val;",
-		"attribute vec4 crv;",
-		"uniform int renderMode;",
-		"uniform int crvMode;",
-		"uniform vec4 maxCrv;",
-		"uniform vec4 minCrv;",
-		"uniform mat4 objectMatrix;",
-		//			THREE.ShaderChunk[ "map_pars_vertex" ],
-		//			THREE.ShaderChunk[ "lightmap_pars_vertex" ],
-		//			THREE.ShaderChunk[ "envmap_pars_vertex" ],
-		THREE.ShaderChunk[ "lights_phong_pars_vertex" ],
-		// THREE.ShaderChunk[ "color_pars_vertex" ],
-		//			THREE.ShaderChunk[ "skinning_pars_vertex" ],
-		//			THREE.ShaderChunk[ "morphtarget_pars_vertex" ],
-		//			THREE.ShaderChunk[ "shadowmap_pars_vertex" ],
-
-		"vec3 crv2color(vec4 curvature){",
-		"  float maxc,minc,c;",
-		"  vec3 colors[5];",
-		"  colors[0] = vec3(0.0, 0.0, 0.85);",  // blue 
-		"  colors[1] = vec3(0.0, 0.9, 0.9);",   // cyan
-		"  colors[2] = vec3(0.0, 0.75, 0.0);",  // green 
-		"  colors[3] = vec3(0.9, 0.9, 0.0); " , // yellow 
-		"  colors[4] = vec3(0.85, 0.0, 0.0);",// red 
-
-		"  if(crvMode == 0){",
-		"    maxc = maxCrv.x;",
-		"    minc = minCrv.x;",
-		"    c = curvature.x;",
-		"  } else if(crvMode == 1){",
-		"    maxc = maxCrv.y;",
-		"    minc = minCrv.y;",
-		"    c = curvature.y;",
-		"  } else if(crvMode == 2){",
-		"    maxc = maxCrv.z;",
-		"    minc = minCrv.z;",
-		"    c = curvature.z;",
-		"  } else if(crvMode == 3){",
-		"    maxc = maxCrv.w;",
-		"    minc = minCrv.w;",
-		"    c = curvature.w;",
-		"  }",
-
-		"  if(abs(maxc-minc) < 0.00001) {",
-		"    c = 0.5;",
-		"  } else if (c > maxc) {",
-		"    c = 1.0;",
-		"  } else {",
-		"    if(c < minc){",
-		"      c = 0.0;",
-		"    }else{",
-		"      c = (c-minc)/(maxc-minc);",
-		"    }",
-		"  }",
-
-		"  if(c>1.0)",
-		"    return colors[4];",
-		"  else if(c>0.75)",
-		"    return (c-0.75)/0.25*colors[4]+(1.0-c)/0.25*colors[3];",
-		"  else if(c>0.5)",
-		"    return (c-0.5)/0.25*colors[3]+(0.75-c)/0.25*colors[2];",
-		"  else if(c>0.25)",
-		"    return (c-0.25)/0.25*colors[2]+(0.5-c)/0.25*colors[1];",
-		"  else if(c>0.0)",
-		"    return (c)/0.25*colors[1]+(0.25-c)/0.25*colors[0];",
-		"  return colors[0];",
-		"}",
-
-		"void main() {",
-		"  vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
-		"  vFixedNormal = normal;",
-		"  vPos = vec4(position,1.0);",
-		//				THREE.ShaderChunk[ "map_vertex" ],
-		//				THREE.ShaderChunk[ "lightmap_vertex" ],
-		//				THREE.ShaderChunk[ "envmap_vertex" ],
-		// THREE.ShaderChunk[ "color_vertex" ],
-		"  if(renderMode == 1)",
-		"    vColor = crv2color(crv);",
-		"  #ifndef USE_ENVMAP",
-		"    vec4 mPosition = objectMatrix * vec4( position, 1.0 );",
-		"  #endif",
-		"  vViewPosition = -mvPosition.xyz;",
-		"  vec3 transformedNormal = normalMatrix * normal;",
-		"  vNormal = transformedNormal;",
-
-		THREE.ShaderChunk[ "lights_phong_vertex" ],
-		//				THREE.ShaderChunk[ "skinning_vertex" ],
-		//				THREE.ShaderChunk[ "morphtarget_vertex" ],
-		//THREE.ShaderChunk[ "default_vertex" ],
-		//				THREE.ShaderChunk[ "shadowmap_vertex" ],
-		// "p_hr_val = hr_val;",
-
-		"}"
-
-	].join("\n"),
-
-	fragmentShader: [
-        "#define  PHONG_PER_PIXEL;",
-		"uniform vec3 diffuse;",
-		"uniform float opacity;",
-		"uniform vec3 ambient;",
-		"uniform vec3 specular;",
-		"uniform float shininess;",
-		"uniform vec3 highlightLineColor;",
-		"uniform int renderMode;",
-		"uniform vec4 dirA;",
-		"uniform vec4 dirH;",
-		"uniform float hl_step;",
-		
-		// THREE.ShaderChunk[ "color_pars_fragment" ],
-		//			THREE.ShaderChunk[ "map_pars_fragment" ],
-		//			THREE.ShaderChunk[ "lightmap_pars_fragment" ],
-		//			THREE.ShaderChunk[ "envmap_pars_fragment" ],
-		//			THREE.ShaderChunk[ "fog_pars_fragment" ],
-		//.ShaderChunk[ "lights_phong_pars_fragment" ],
-		//			THREE.ShaderChunk[ "shadowmap_pars_fragment" ],
-		//"varying float p_hr_val;",
-		"varying vec3 vColor;",
-		"varying vec4 vPos;",
-		"varying vec3 vFixedNormal;",
-
-		"float cal_highlight(){",
-		"  vec3 normal = normalize( vFixedNormal );",
-		"  vec3 pos = vPos.xyz/vPos.w;",
-		"  vec3 A = dirA.xyz;",
-		"  vec3 H = dirH.xyz;",
-		//" vec3 ref_light = reflect((pos-A),normal);",
-		"  if(renderMode == 2){", // highlight mode
-		//"     A = dirA.xyz;",
-		"  } else if(renderMode == 3) {",    //reflection light
-		"    normal = reflect(normalize(pos-dirA.xyz),normal);", 
-		"  }",
-		"  vec3 temp = cross(H,normal);",
-		"  float divl = length(temp);",
-		"  if(divl < 0.0001)",
-		"    return 0.0;",
-		"  else",
-		"    return dot(temp,A-pos)/divl;",
-		"}",
-
-		"void main() {",
-
-		"gl_FragColor = vec4( vec3 ( 1.0 ), opacity );",
-
-		//				THREE.ShaderChunk[ "map_fragment" ],
-		//THREE.ShaderChunk[ "alphatest_fragment" ],
-		"if(renderMode != 1){", // not curvature mode
-		//THREE.ShaderChunk[ "lights_phong_fragment" ],
-		"  if(renderMode == 2 || renderMode == 3){",
-		//"    float temp = fract(p_hr_val);",
-		"    float temp = fract(cal_highlight()/hl_step);",
-		//"      gl_FragColor = vec4(temp,temp,temp,1.0);",
-		"    if(temp > 1.0/3.0 && temp < 2.0/3.0){",
-		"      gl_FragColor = vec4(highlightLineColor,1.0);",
-		"    }",
-		"  }",
-
-
-		"}",
-		//				THREE.ShaderChunk[ "lightmap_fragment" ],
-		"else if(renderMode == 1){", // curvature render
-		// THREE.ShaderChunk[ "color_fragment" ],
-		"  gl_FragColor = vec4( vColor, opacity );",
-		"}",
-		//				THREE.ShaderChunk[ "envmap_fragment" ],
-		//				THREE.ShaderChunk[ "shadowmap_fragment" ],
-		//				THREE.ShaderChunk[ "linear_to_gamma_fragment" ],
-		//				THREE.ShaderChunk[ "fog_fragment" ],
-		"}"
-	].join("\n"),*/
-};
-//THREE.ShaderLib
-test = {
     vertexShader: [
         "#define  PHONG_PER_PIXEL",
         "varying vec3 vViewPosition;",
@@ -417,8 +231,6 @@ test = {
         "uniform vec4 maxCrv;",
         "uniform vec4 minCrv;",
         "uniform mat4 objectMatrix;",
-        
-        //THREE.ShaderChunk[ "lights_phong_pars_vertex" ],
         
         "vec3 crv2color(vec4 curvature){",
 		"  float maxc,minc,c;",
@@ -491,9 +303,6 @@ test = {
 		
 		"   //Setting vertice position",
 		"		gl_Position = projectionMatrix * mvPosition;",
-		
-		//THREE.ShaderChunk[ "lights_phong_vertex" ],
-		//THREE.ShaderChunk[ "default_vertex" ],
 		"}",
         ].join("\n"),
         
@@ -511,8 +320,6 @@ test = {
 		"varying vec3 vColor;",
 		"varying vec4 vPos;",
 		"varying vec3 vFixedNormal;",
-		
-		//HREE.ShaderChunk[ "lights_phong_pars_fragment" ],
 		
 		"float cal_highlight(){",
 		"   vec3 normal = normalize( vFixedNormal );",
@@ -534,14 +341,9 @@ test = {
 		
         "void main(void) {",
         
-        //THREE.ShaderChunk[ "alphatest_fragment" ],
-        
         "   if(renderMode == 1){", // curvature mode
 		"        gl_FragColor=vec4(vColor, opacity);",
 		"   }else if(renderMode == 2 || renderMode == 3){",// curvature render
-		
-		//THREE.ShaderChunk[ "lights_phong_fragment" ],
-		
 		"       float temp = fract(cal_highlight()/hl_step);",
 		"       if(temp > 1.0/3.0 && temp < 2.0/3.0){",
 		"           gl_FragColor = vec4(highlightLineColor,1.0);",

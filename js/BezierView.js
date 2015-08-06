@@ -70,9 +70,6 @@ BezierView.prototype.activeBVInputTextMenu = function(render){
         
         //Load Mesh
         render.setMeshFromText(data);
-        
-        //Setting regular view
-        $("#viewRegular").click();
     });
     
     //Script to close the textarea
